@@ -12,41 +12,17 @@ public class Program {
 
     public static void main(String[] args) {
 
-        DateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-
         Connection conn = null;
         PreparedStatement st = null;
         try {
             conn = DB.getConnection();
 
-            /*
-            st = conn.prepareStatement(
-                    "INSERT INTO seller (Name, Email, BirthDate, BaseSalary, DepartmentId)" +
-                            "VALUES (?, ?, ?, ?, ?)",
-                    st.RETURN_GENERATED_KEYS
-            );
+            st = conn.prepareStatement("UPDATE seller SET BaseSalary = BaseSalary + ? WHERE (DepartmentId = ?)");
 
-            st.setString(1, "Kayk");
-            st.setString(2, "Kayk@gmail.com");
-            st.setDate(3, new java.sql.Date(sdf.parse("22/03/2006").getTime()));
-            st.setDouble(4, 3000.00);
-            st.setInt(5, 4);
-            */
-
-            st = conn.prepareStatement("insert into department (Name) values ('D1'),('D2')",
-                    Statement.RETURN_GENERATED_KEYS);
+            st.setDouble(1, 200.0);
+            st.setInt(2, 2);
 
             int rowsAffected = st.executeUpdate();
-
-            if (rowsAffected > 0) {
-                ResultSet rs = st.getGeneratedKeys();
-                while (rs.next()) {
-                    int id = rs.getInt(1);
-                    System.out.println("Done! ID: " + id);
-                }
-            } else {
-                System.out.println("No rows affected");
-            }
 
             System.out.println("Done! Rows Affected: " + rowsAffected);
 
